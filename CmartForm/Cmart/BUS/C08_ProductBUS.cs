@@ -8,31 +8,31 @@ namespace Cmart.BUS
 {
     class C08_ProductBUS
     {
-        CMART1Entities db;
+        CMART1Entities1 db;
         public List<Product> loadListProduct()
         {
-            db = new CMART1Entities();
+            db = new CMART1Entities1();
             return db.Products.ToList();
         }
         public List<Product> searchProductList(string mp)
         {
-            db = new CMART1Entities();
+            db = new CMART1Entities1();
             return db.Products.Where(st=>st.Name.Contains(mp)|| st.Image.Contains(mp) || st.IDSupplier.Contains(mp) || st.IDType.Contains(mp) ).ToList();
         }
         public List<ProductType> loadProducTypetList()
         {
-            db = new CMART1Entities();
+            db = new CMART1Entities1();
             return db.ProductTypes.ToList();
         }
         public List<Supplier> loadSuppliertList()
         {
-            db = new CMART1Entities();
+            db = new CMART1Entities1();
             return db.Suppliers.ToList();
         }
         public bool checkExistedProduct(string stm)
         {
-            db = new CMART1Entities();
-            Product product = db.Products.FirstOrDefault(st=>st.Name.Equals(stm)||st.IDProduct.Equals(stm));
+            db = new CMART1Entities1();
+            Product product = db.Products.FirstOrDefault(st=>st.Name.Equals(stm));
             if (product==null)
             {
                 return true;
@@ -41,55 +41,82 @@ namespace Cmart.BUS
         }
         public bool addProduct(string Name, string image,string IDSupplier,string IDType)
         {
-            db = new CMART1Entities();
-
-            Product product = new Product();
-            ProductType type = db.ProductTypes.Single(st=>st.IDTye.Equals(IDType));
-            try
+            db = new CMART1Entities1();
+            Product pro = null;
+            List<Product> lst = db.Products.ToList();
+            foreach (Product pri in lst)
             {
-
-                        Random d = new Random();
-                        product.IDProduct = d.Next(100000000,999999999).ToString()+d.Next(1000,9999).ToString() ;
-                        product.Name = Name;
-                        product.Image = image;
-                        product.IDSupplier = IDSupplier;
-                        product.IDType = IDType;
-                        type.Quantity = type.Quantity+ 1;
-                        db.Products.Add(product);
-                        db.SaveChanges();
-                return true;               
+                pro = pri;
             }
-            catch (Exception)
+            if (pro != null)
             {
-                return false;
-            }
-        }
-        public bool editProduct(string id,string Name, string image, string IDSupplier, string IDType)
-        {
-            db = new CMART1Entities();
-            Product product = db.Products.Single(st=>st.IDProduct.Equals(id));
-            try
-            {
-                if (IDType!=product.IDType)
+                int a = pro.IDProduct;
+                Product product = new Product();
+                ProductType type = db.ProductTypes.Single(st => st.IDType.Equals(IDType));
+                try
                 {
-                    ProductType type1 = db.ProductTypes.Single(st =>st.IDTye.Equals(IDType));
-                    ProductType type2 = db.ProductTypes.Single(st => st.IDTye.Equals(product.IDType));
-                    product.Image = image;
+                    product.IDProduct = a + 1;
                     product.Name = Name;
+                    product.Image = image;
                     product.IDSupplier = IDSupplier;
                     product.IDType = IDType;
-                    type1.Quantity = type1.Quantity + 1;
-                    type2.Quantity = type2.Quantity - 1;
+                    type.Quantity = type.Quantity + 1;
+                    db.Products.Add(product);
                     db.SaveChanges();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                Product product = new Product();
+                ProductType type = db.ProductTypes.Single(st => st.IDType.Equals(IDType));
+                try
+                {
+                    product.IDProduct = 1;
+                    product.Name = Name;
+                    product.Image = image;
+                    product.IDSupplier = IDSupplier;
+                    product.IDType = IDType;
+                    type.Quantity = type.Quantity + 1;
+                    db.Products.Add(product);
+                    db.SaveChanges();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+        public bool editProduct(int id,string Name, string image, string IDSupplier, string IDType)
+        {
+            db = new CMART1Entities1();
+            try
+            {
+                Product product = db.Products.Single(st => st.IDProduct.Equals(id));
+                if (IDType!=product.IDType)
+                {
+                        ProductType type1 = db.ProductTypes.Single(st => st.IDType.Equals(IDType));
+                        ProductType type2 = db.ProductTypes.Single(st => st.IDType.Equals(product.IDType));
+                        product.Image = image;
+                        product.Name = Name;
+                        product.IDSupplier = IDSupplier;
+                        product.IDType = IDType;
+                        type2.Quantity = type2.Quantity - 1;
+                        type1.Quantity = type1.Quantity + 1;
+                        db.SaveChanges();
                 }
 
                 else {
                     product.Name = Name;
                     product.Image = image;
                     product.IDSupplier = IDSupplier;
-                    product.IDType = IDType;
                     db.SaveChanges();
-                }
+                     }
                 return true;
             }
             catch (Exception)
@@ -97,15 +124,22 @@ namespace Cmart.BUS
                 return false;
             }
         }
-        public bool deleteProduct(string id)
+        public bool deleteProduct(int id)
         {
-            db = new CMART1Entities();
-            Product product = db.Products.Single(st => st.IDProduct.Contains(id));
-            ProductType type = db.ProductTypes.Single(st => st.IDTye.Equals(product.IDType));
-            db.Products.Remove(product);
-            type.Quantity = type.Quantity- 1;
-            db.SaveChanges();
-            return true;
+            try
+            {
+                db = new CMART1Entities1();
+                Product product = db.Products.Single(st => st.IDProduct.Equals(id));
+                ProductType type = db.ProductTypes.Single(st => st.IDType.Equals(product.IDType));
+                db.Products.Remove(product);
+                type.Quantity = type.Quantity - 1;
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

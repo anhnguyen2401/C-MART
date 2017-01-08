@@ -11,7 +11,7 @@ namespace Cmart.BUS
     {
         string userName;
         Account acc;
-        CMART1Entities db = new CMART1Entities();
+        CMART1Entities1 db = new CMART1Entities1();
         public C01_LoginBUS(string Username)
         {
             this.userName = Username;
@@ -19,9 +19,16 @@ namespace Cmart.BUS
 
         public Account FindAcc()
         {
-            db = new CMART1Entities();
-            acc= db.Accounts.FirstOrDefault(x => x.Username == userName);
-            return acc;
+            db = new CMART1Entities1();
+            try
+            {
+                acc = db.Accounts.Single(x => x.Username == userName);
+                return acc;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
         public string getPosition()
         {
