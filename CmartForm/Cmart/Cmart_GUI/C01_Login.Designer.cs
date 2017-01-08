@@ -50,6 +50,7 @@
             // 
             this.txtSupplier.Location = new System.Drawing.Point(277, 254);
             this.txtSupplier.Name = "txtSupplier";
+            this.txtSupplier.PasswordChar = '*';
             this.txtSupplier.Size = new System.Drawing.Size(227, 20);
             this.txtSupplier.TabIndex = 50;
             // 

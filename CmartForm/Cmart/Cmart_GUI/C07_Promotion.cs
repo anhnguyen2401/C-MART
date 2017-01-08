@@ -8,21 +8,35 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Cmart.Cmart_GUI;
+using Cmart.BUS;
 namespace Cmart.Cmart_GUI
 {
     public partial class C07_Promotion : Form
     {
+        CMART1Entities1 db = new CMART1Entities1();
+        C07_PromotionBUS bus = new C07_PromotionBUS();
+        Promotion promotion = new Promotion();
         validation a = new validation();
+        string image;
+        int i = 0;
+        int t = 0;
         public C07_Promotion(string name)
         {
             InitializeComponent();
             label1.Text = name;
             importManagementToolStripMenuItem.Visible = false;
             billToolStripMenuItem.Visible = false;
+            loadList();
+            this.tabList.TabIndex = 0;
+            this.tabAdd.TabIndex = 1;
+            btnCancel.Text ="Clear";
         }
-  
-
-        
+        public void loadList()
+        {
+            list.DataSource = bus.loadPromotion();
+            list.Columns[0].Visible = false;
+            list.Columns[7].Visible = false;
+        }
         private void productToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Hide();
@@ -32,45 +46,73 @@ namespace Cmart.Cmart_GUI
         }
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string message = null;
-            string idData = "C001" ;
-            if (!a.Required(txtID))
+            if (i == 0)
             {
-                message += "ID is a required field\n";
+                string message = null;
+                if (!a.Required(txtID))
+                {
+                    message += "Name is a required field\n";
+                }
+                else if (!a.checkNumbertype(txtID.Text))
+                {
+                    message += "ID product is not right";
+                }
+                else if (!a.checkNumbertype(txtPrice.Text))
+                {
+                    message += "Price is not right";
+                }
+                else if (!a.Required(txtPrice))
+                { message += "txtPrice is a required field\n"; }
+                else
+                {
+                    
+                    if (bus.addPromotion(int.Parse(txtID.Text), float.Parse(txtPrice.Text), image, dateTimeStart.Value, dateTimeEnd.Value, txtContent.Text))
+                    {
+                        message += "Add New Promotion successfully\n";
+                        loadList();
+                        tabControl1.SelectedIndex = 0;
+                    }
+                    else message += "Add New Promotion fail";
+
+                }
+                if (message == null)
+                    MessageBox.Show("Success");
+                else MessageBox.Show(message);
             }
-            else if (!a.Compare(txtID.Text.ToString(),idData))
+            if (i == 1)
             {
-                message += "ID is not exist\n";
+                string message = null;
+                if (!a.Required(txtID))
+                    message += "Name is a required field\n";
+                else if (!a.checkNumbertype(txtID.Text))
+                {
+                    message += "ID product is not right";
+                }
+                else if (!a.checkNumbertype(txtPrice.Text))
+                {
+                    message += "Price is not right";
+                }
+                else
+                {
+
+                        string id = (string)list.SelectedRows[0].Cells[0].Value;
+                        if (bus.editPromotion(id, int.Parse(txtID.Text), txtPrice.Text, image, dateTimeStart.Value, dateTimeEnd.Value, txtContent.Text))
+                        {
+                            message += "Update Promotion successfully\n";
+                            loadList();
+                            this.tabAdd.Text = "Add";
+                            tabControl1.SelectedIndex = 0;
+                            btnEdit.Enabled = true;
+                    }
+                    else message += "Update Promotion fail";
+                }
+                if (message == null)
+                {
+                    i = 0;
+                    MessageBox.Show("Success");
+                }
+                else MessageBox.Show(message);
             }
-            if (!a.Required(txtPrice))
-            {
-                message += "Price is a required field\n";
-            }
-            else if (!a.checkNumber(txtPrice.Text.ToString()))
-            {
-                message += "Price fills numbers\n";
-            }
-            else if (!a.RangeMoney(1000, float.Parse(txtPrice.Text.ToString())))
-            {
-                message += "Price begins 1000vnd\n";
-            }
-            if (!a.compareDate(DateTime.Now,dateTimeStart.Value))
-            {
-                message += "startDate is equal or more than now\n";
-            }
-            else if (!a.compareDate(dateTimeStart.Value,dateTimeEnd.Value))
-            {
-                message += "startDate is less than endDate\n";
-            }
-            if (!a.Required(txtContent))
-            {
-                message += "Content is a required field\n";
-            }
-            if (message == null)
-            {
-                MessageBox.Show("Success");
-            }
-            else MessageBox.Show(message);
         }
 
         private void promotionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -115,6 +157,78 @@ namespace Cmart.Cmart_GUI
             C01_Login a = new C01_Login();
             a.ShowDialog();
             this.Close();
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            list.DataSource = bus.searchPromotion(txtSearch.Text);
+        }
+
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            t++;
+            OpenFileDialog open = new OpenFileDialog();
+            open.Filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp)|*.jpg; *.jpeg; *.gif; *.bmp";
+            if (open.ShowDialog() == DialogResult.OK)
+            {
+                img.Image = new Bitmap(open.FileName);
+                image = "hinhanhPromotion"+t+".jpg";
+            }
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (list.SelectedRows.Count == 1)
+            {
+                i = 1;
+                CMART1Entities1 db = new CMART1Entities1();
+                string id = (string)list.SelectedRows[0].Cells[0].Value;
+                promotion = db.Promotions.Single(st => st.IDPromotion.Equals(id));
+                txtID.Text = promotion.IDProduct.ToString();
+                txtPrice.Text = promotion.Price.ToString();
+                image = promotion.Image;
+                img.ImageLocation = image;
+                txtContent.Text = promotion.Contents;
+                this.tabAdd.Text = "Edit";
+                btnEdit.Enabled = false;
+                btnCancel.Text = "Cancel";
+                tabControl1.SelectedIndex = 1;
+            }
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            string id = (string)list.SelectedRows[0].Cells[0].Value;
+            if (bus.deletePromotion(id, list))
+            {
+                MessageBox.Show("Delete Promotion successfully! ");
+                loadList();
+            }
+            else MessageBox.Show("Choose Promotion in list ");
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            if (i == 0)
+            {
+                txtID.Text = "";
+                txtPrice.Text = "";
+                txtContent.Text = "";
+                img.Image = null;
+            }
+            if (i==1)
+            {
+                txtID.Text = "";
+                txtPrice.Text = "";
+                txtContent.Text = "";
+                img.Image = null;
+                image = null;
+                i = 0;
+                this.tabAdd.Text = "Add";
+                btnCancel.Text = "Clear";
+                btnEdit.Enabled = true;
+                tabControl1.SelectedIndex = 0;
+            }
         }
     }
 }

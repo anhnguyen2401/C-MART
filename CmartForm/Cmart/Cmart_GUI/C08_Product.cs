@@ -16,12 +16,8 @@ namespace Cmart.Cmart_GUI
         validation a = new validation();
         C08_ProductBUS bus = new C08_ProductBUS();
         int i = 0;
-        string IDproduct;
         string image;
-        string Name;
-        string IDSupplier;
-        string IDType;
-
+        int b = 0;
         public C08_Product(string name)
         {
             InitializeComponent();
@@ -33,7 +29,7 @@ namespace Cmart.Cmart_GUI
             this.cbbSupplier.ValueMember = "IDSupplier";
             this.cbbSupplier.DisplayMember = "Name";
             cbbTypes.DataSource = bus.loadProducTypetList();
-            this.cbbTypes.ValueMember = "IDTye";
+            this.cbbTypes.ValueMember = "IDType";
             this.cbbTypes.DisplayMember = "Name";
             this.tabList.TabIndex = 0;
             this.tabPage2.TabIndex = 1;
@@ -90,10 +86,15 @@ namespace Cmart.Cmart_GUI
                 {
                     if (bus.checkExistedProduct(txtName.Text))
                     {
-                        if (bus.addProduct(txtName.Text, image, cbbSupplier.SelectedValue.ToString(), cbbTypes.SelectedValue.ToString()))
+                        if (bus.addProduct( txtName.Text, image, cbbSupplier.SelectedValue.ToString(), cbbTypes.SelectedValue.ToString()))
                         {
                             message += "Add New Product successfully\n";
                             loadList();
+                            image = null;
+                            txtName.Text = null;
+                            img.Image = null;
+                            cbbSupplier.Text = "Hao Hao";
+                            cbbTypes.Text = "Drink";
                             tabControl1.SelectedIndex = 0;
                         }
                         else message += "Add New Product fail";
@@ -117,13 +118,17 @@ namespace Cmart.Cmart_GUI
                 {
                     if (bus.checkExistedProduct(txtName.Text))
                     {
-                        string id = (string)list.SelectedRows[0].Cells[0].Value;
+                        int id = (int)list.SelectedRows[0].Cells[0].Value;
                         if (bus.editProduct(id, txtName.Text, image, cbbSupplier.SelectedValue.ToString(), cbbTypes.SelectedValue.ToString()))
                         {
-
                             message += "Update Product successfully\n";
                             loadList();
                             this.tabPage2.Text = "Add";
+                            image = null;
+                            txtName.Text = null;
+                            img.Image = null;
+                            cbbSupplier.Text = "Hao Hao";
+                            cbbTypes.Text = "Drink";
                             tabControl1.SelectedIndex = 0;
                         }
                         else message += "Product is existed";
@@ -141,6 +146,10 @@ namespace Cmart.Cmart_GUI
         public void loadList()
         {
             list.DataSource = bus.loadListProduct();
+            for (int i =5;i<13;i++)
+            {
+                list.Columns[i].Visible = false;
+            }
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -157,6 +166,7 @@ namespace Cmart.Cmart_GUI
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
+            b++;
             OpenFileDialog open = new OpenFileDialog();
             open.Filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp)|*.jpg; *.jpeg; *.gif; *.bmp";
             if (open.ShowDialog() == DialogResult.OK)
@@ -164,41 +174,59 @@ namespace Cmart.Cmart_GUI
                 // display image in picture box
                 img.Image = new Bitmap(open.FileName);
                 // image file path
-                image = open.FileName;
+                image = "hinhanh"+ b +".jpg";
             }
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
 
-            string id = (string)list.SelectedRows[0].Cells[0].Value;
+            int id = (int)list.SelectedRows[0].Cells[0].Value;
             if (bus.deleteProduct(id))
             {
                 MessageBox.Show("Delete Product successfully! ");
                 loadList();
-            }
+            }else MessageBox.Show("Choose product in list ");
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            image = null;
-            txtName.Text = null;
-            img.Image = null;
+            if (i==0)
+            {
+                image = null;
+                txtName.Text = null;
+                img.Image = null;
+            }
+            if (i==1)
+            {
+                i = 0;
+                image = null;
+                txtName.Text = null;
+                cbbSupplier.Text = "Hao Hao";
+                cbbTypes.Text = "Drink";
+                img.Image = null;
+                tabControl1.SelectedIndex = 0;
+                this.tabPage2.Text = "Add";
+            }
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            i = 1;
-            CMART1Entities db = new CMART1Entities();
-            string id = (string)list.SelectedRows[0].Cells[0].Value;
-            Product product = db.Products.Single(st => st.IDProduct.Equals(id));
-            txtName.Text = product.Name;
-            image = product.Image;
-            img.ImageLocation = image;
-            cbbTypes.Text = product.ProductType.Name;
-            cbbSupplier.Text = product.Supplier.Name;
-            this.tabPage2.Text = "Edit";
-            tabControl1.SelectedIndex = 1;
+            if (list.SelectedRows.Count == 1)
+            {
+                i = 1;
+                CMART1Entities1 db = new CMART1Entities1();
+                int id = (int)list.SelectedRows[0].Cells[0].Value;
+                Product product = db.Products.Single(st => st.IDProduct.Equals(id));
+                txtName.Text = product.Name;
+                image = product.Image;
+                img.ImageLocation = image;
+                cbbTypes.Text = product.ProductType.Name;
+                cbbSupplier.Text = product.Supplier.Name;
+                btnClear.Text = "Cancel";
+                this.tabPage2.Text = "Edit";
+                tabControl1.SelectedIndex = 1;
+            }
 
         }
     }

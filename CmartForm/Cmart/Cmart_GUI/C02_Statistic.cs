@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Cmart.BUS;
+using DevExpress.XtraReports.UI;
 
 namespace Cmart.Cmart_GUI
 {
@@ -45,17 +46,7 @@ namespace Cmart.Cmart_GUI
             pricehis.ShowDialog();
             this.Close();
         }
-
-        private void btnFilterAll_Click(object sender, EventArgs e)
-        {
-            C02_StatisticBUS staBUS = new C02_StatisticBUS();
-            this.dataGridView1.DataSource = staBUS.loadBillList();
-            this.lblTotalQuantity.Text = TotalQuantity();
-            this.lblTotalAmount.Text = TotalAmount();
-            DisableAllDateTimePicker();
-            DisableAllRadioButton();
-        }
-
+        
         private void C02_Statistic_Load(object sender, EventArgs e)
         {
             C02_StatisticBUS staBUS = new C02_StatisticBUS();
@@ -77,47 +68,59 @@ namespace Cmart.Cmart_GUI
             this.dateTimePicker2.Enabled = false;
         }
 
-        public void DisableAllRadioButton() {
-            this.rbtnMonth.Checked = false; 
+        public void DisableAllRadioButton()
+        {
+            this.rbtnMonth.Checked = false;
             this.rbtnYear.Checked = false;
-            this.radioButton1.Checked = false;
+            this.rbtnDay.Checked = false;
+        }
+        
+        private string TotalAmount()
+        {
+            string result = "";
+            int total = 0;
+            if (this.dataGridView1.Rows.Count == 0)
+            {
+                result = "0";
+                return result;
+            }
+            else
+            {
+                for (int i = 0; i < this.dataGridView1.Rows.Count; i++)
+                {
+                    total = total + Convert.ToInt32(this.dataGridView1.Rows[i].Cells["TotalAmount"].Value.ToString());
+                }
+                return result + total;
+            }
         }
 
-        private void rbtnYear_CheckedChanged(object sender, EventArgs e)
+        private string TotalQuantity()
         {
-            this.dpFromYear_FilterByYear.Enabled = true;
-            this.dpToYear_FilterByYear.Enabled = true;
-
-            this.dpFromMonth_FilterByMonth.Enabled = false;
-            this.dpToMonth_FilterByMonth.Enabled = false;
-
-            this.dateTimePicker1.Enabled = false;
-            this.dateTimePicker2.Enabled = false;
+            string result = "";
+            int total = 0;
+            if (this.dataGridView1.Rows.Count == 0)
+            {
+                result = "0";
+                return result;
+            }
+            else
+            {
+                for (int i = 0; i < this.dataGridView1.Rows.Count; i++)
+                {
+                    total = total + Convert.ToInt32(this.dataGridView1.Rows[i].Cells["TotalQuantity"].Value.ToString());
+                }
+                return result + total;
+            }
         }
 
-        private void rbtnMonth_CheckedChanged(object sender, EventArgs e)
+        private void btnFilterAll_Click(object sender, EventArgs e)
         {
-            this.dpFromYear_FilterByYear.Enabled = false;
-            this.dpToYear_FilterByYear.Enabled = false;
-
-            this.dpFromMonth_FilterByMonth.Enabled = true;
-            this.dpToMonth_FilterByMonth.Enabled = true;
-
-            this.dateTimePicker1.Enabled = false;
-            this.dateTimePicker2.Enabled = false;
-        }
-
-        private void radioButton1_CheckedChanged_1(object sender, EventArgs e)
-        {
-            this.dpFromYear_FilterByYear.Enabled = false;
-            this.dpToYear_FilterByYear.Enabled = false;
-
-            this.dpFromMonth_FilterByMonth.Enabled = false;
-            this.dpToMonth_FilterByMonth.Enabled = false;
-
-            this.dateTimePicker1.Enabled = true;
-            this.dateTimePicker2.Enabled = true;
-
+            C02_StatisticBUS staBUS = new C02_StatisticBUS();
+            this.dataGridView1.DataSource = staBUS.loadBillList();
+            this.lblTotalQuantity.Text = TotalQuantity();
+            this.lblTotalAmount.Text = TotalAmount();
+            DisableAllDateTimePicker();
+            DisableAllRadioButton();
         }
 
         private void btnFilter_Click(object sender, EventArgs e)
@@ -151,7 +154,7 @@ namespace Cmart.Cmart_GUI
                 this.dataGridView1.DataSource = staBUS.ViewDateRange(from, to);
             }
 
-            if (radioButton1.Checked)
+            if (rbtnDay.Checked)
             {
 
                 this.dataGridView1.DataSource = staBUS.ViewDateRange(this.dateTimePicker2.Value, this.dateTimePicker1.Value);
@@ -160,44 +163,56 @@ namespace Cmart.Cmart_GUI
             this.lblTotalAmount.Text = TotalAmount();
         }
 
-
-        private string TotalAmount()
+        private void rbtnDay_CheckedChanged(object sender, EventArgs e)
         {
-            string result = "";
-            int total = 0;
-            if (this.dataGridView1.Rows.Count == 0)
-            {
-                result = "0";
-                return result;
-            }
-            else
-            {
-                for (int i = 0; i < this.dataGridView1.Rows.Count; i++)
-                {
-                    total = total + Convert.ToInt32(this.dataGridView1.Rows[i].Cells["TotalAmount"].Value.ToString());
-                }
-                return result + total;
-            }
+            this.dpFromYear_FilterByYear.Enabled = false;
+            this.dpToYear_FilterByYear.Enabled = false;
+
+            this.dpFromMonth_FilterByMonth.Enabled = false;
+            this.dpToMonth_FilterByMonth.Enabled = false;
+
+            this.dateTimePicker1.Enabled = true;
+            this.dateTimePicker2.Enabled = true;
         }
 
-
-        private string TotalQuantity()
+        private void rbtnMonth_CheckedChanged(object sender, EventArgs e)
         {
-            string result = "";
-            int total = 0;
-            if (this.dataGridView1.Rows.Count == 0)
-            {
-                result = "0";
-                return result;
-            }
-            else
-            {
-                for (int i = 0; i < this.dataGridView1.Rows.Count; i++)
-                {
-                    total = total + Convert.ToInt32(this.dataGridView1.Rows[i].Cells["TotalQuantity"].Value.ToString());
-                }
-                return result + total;
-            }
+            this.dpFromYear_FilterByYear.Enabled = false;
+            this.dpToYear_FilterByYear.Enabled = false;
+
+            this.dpFromMonth_FilterByMonth.Enabled = true;
+            this.dpToMonth_FilterByMonth.Enabled = true;
+
+            this.dateTimePicker1.Enabled = false;
+            this.dateTimePicker2.Enabled = false;
+        }
+
+        private void rbtnYear_CheckedChanged(object sender, EventArgs e)
+        {
+            this.dpFromYear_FilterByYear.Enabled = true;
+            this.dpToYear_FilterByYear.Enabled = true;
+
+            this.dpFromMonth_FilterByMonth.Enabled = false;
+            this.dpToMonth_FilterByMonth.Enabled = false;
+
+            this.dateTimePicker1.Enabled = false;
+            this.dateTimePicker2.Enabled = false;
+        }
+
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+            CMART1Entities1 db = new CMART1Entities1();
+            XtraReport4 rpt = new XtraReport4();
+            ReportPrintTool tool = new ReportPrintTool(rpt);
+            rpt.ShowPreviewDialog();
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            C01_Login a = new C01_Login();
+            a.ShowDialog();
+            this.Close();
         }
     }
 }

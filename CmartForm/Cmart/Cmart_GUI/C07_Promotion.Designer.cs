@@ -62,6 +62,7 @@
             this.categoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.billToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.btnEdit = new System.Windows.Forms.Button();
             this.tabList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.list)).BeginInit();
             this.tabAdd.SuspendLayout();
@@ -78,6 +79,7 @@
             this.btnDelete.TabIndex = 6;
             this.btnDelete.Text = "Delete";
             this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // btnSearch
             // 
@@ -87,6 +89,7 @@
             this.btnSearch.TabIndex = 4;
             this.btnSearch.Text = "Search";
             this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // txtSearch
             // 
@@ -98,6 +101,7 @@
             // 
             // tabList
             // 
+            this.tabList.Controls.Add(this.btnEdit);
             this.tabList.Controls.Add(this.btnDelete);
             this.tabList.Controls.Add(this.list);
             this.tabList.Controls.Add(this.btnSearch);
@@ -112,6 +116,8 @@
             // 
             // list
             // 
+            this.list.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.list.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.list.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.list.Location = new System.Drawing.Point(3, 33);
             this.list.Name = "list";
@@ -159,6 +165,7 @@
             this.btnBrowse.TabIndex = 39;
             this.btnBrowse.Text = "Browse";
             this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
             // txtContent
             // 
@@ -203,6 +210,7 @@
             this.btnCancel.TabIndex = 34;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnSave
             // 
@@ -387,6 +395,16 @@
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // btnEdit
+            // 
+            this.btnEdit.Location = new System.Drawing.Point(595, 382);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(75, 23);
+            this.btnEdit.TabIndex = 7;
+            this.btnEdit.Text = "Edit";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
+            // 
             // C07_Promotion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -448,5 +466,6 @@
         private System.Windows.Forms.TextBox txtID;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnEdit;
     }
 }

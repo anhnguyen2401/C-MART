@@ -42,8 +42,8 @@
             this.lblName = new System.Windows.Forms.Label();
             this.tabList = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.btnDelete = new System.Windows.Forms.Button();
-            this.list = new System.Windows.Forms.DataGridView();
+            this.btnEdit = new System.Windows.Forms.Button();
+            this.lstBill = new System.Windows.Forms.DataGridView();
             this.btnSearch = new System.Windows.Forms.Button();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.tabAdd = new System.Windows.Forms.TabPage();
@@ -68,15 +68,16 @@
             this.label6 = new System.Windows.Forms.Label();
             this.lblTotalQuantity = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.lstBill = new System.Windows.Forms.DataGridView();
+            this.lstPro = new System.Windows.Forms.DataGridView();
             this.dateTime = new System.Windows.Forms.DateTimePicker();
             this.label2 = new System.Windows.Forms.Label();
+            this.btnPrint = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.tabList.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.list)).BeginInit();
-            this.tabAdd.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lstBill)).BeginInit();
+            this.tabAdd.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.lstPro)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -193,8 +194,9 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.btnDelete);
-            this.tabPage1.Controls.Add(this.list);
+            this.tabPage1.Controls.Add(this.btnPrint);
+            this.tabPage1.Controls.Add(this.btnEdit);
+            this.tabPage1.Controls.Add(this.lstBill);
             this.tabPage1.Controls.Add(this.btnSearch);
             this.tabPage1.Controls.Add(this.txtSearch);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -205,22 +207,25 @@
             this.tabPage1.Text = "List";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // btnDelete
+            // btnEdit
             // 
-            this.btnDelete.Location = new System.Drawing.Point(3, 382);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(75, 23);
-            this.btnDelete.TabIndex = 6;
-            this.btnDelete.Text = "Delete";
-            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnEdit.Location = new System.Drawing.Point(518, 382);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(75, 23);
+            this.btnEdit.TabIndex = 7;
+            this.btnEdit.Text = "Edit";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
-            // list
+            // lstBill
             // 
-            this.list.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.list.Location = new System.Drawing.Point(3, 33);
-            this.list.Name = "list";
-            this.list.Size = new System.Drawing.Size(670, 343);
-            this.list.TabIndex = 5;
+            this.lstBill.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.lstBill.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.lstBill.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.lstBill.Location = new System.Drawing.Point(3, 33);
+            this.lstBill.Name = "lstBill";
+            this.lstBill.Size = new System.Drawing.Size(670, 343);
+            this.lstBill.TabIndex = 5;
             // 
             // btnSearch
             // 
@@ -262,7 +267,7 @@
             this.tabAdd.Controls.Add(this.label6);
             this.tabAdd.Controls.Add(this.lblTotalQuantity);
             this.tabAdd.Controls.Add(this.label3);
-            this.tabAdd.Controls.Add(this.lstBill);
+            this.tabAdd.Controls.Add(this.lstPro);
             this.tabAdd.Controls.Add(this.dateTime);
             this.tabAdd.Controls.Add(this.label2);
             this.tabAdd.Location = new System.Drawing.Point(4, 22);
@@ -281,6 +286,7 @@
             this.btnDeleteProduct.TabIndex = 25;
             this.btnDeleteProduct.Text = "Delete";
             this.btnDeleteProduct.UseVisualStyleBackColor = true;
+            this.btnDeleteProduct.Click += new System.EventHandler(this.btnDeleteProduct_Click);
             // 
             // btnAdd
             // 
@@ -346,19 +352,20 @@
             this.btnCancel.TabIndex = 18;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // txtReceived
             // 
             this.txtReceived.Location = new System.Drawing.Point(94, 303);
             this.txtReceived.Name = "txtReceived";
-            this.txtReceived.Size = new System.Drawing.Size(100, 20);
+            this.txtReceived.Size = new System.Drawing.Size(146, 20);
             this.txtReceived.TabIndex = 17;
             // 
             // label15
             // 
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(630, 320);
+            this.label15.Location = new System.Drawing.Point(601, 320);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(43, 20);
             this.label15.TabIndex = 16;
@@ -369,7 +376,7 @@
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(200, 326);
+            this.label14.Location = new System.Drawing.Point(246, 326);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(43, 20);
             this.label14.TabIndex = 15;
@@ -380,7 +387,7 @@
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(200, 301);
+            this.label13.Location = new System.Drawing.Point(246, 301);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(43, 20);
             this.label13.TabIndex = 14;
@@ -393,9 +400,9 @@
             this.lblReturned.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblReturned.Location = new System.Drawing.Point(102, 326);
             this.lblReturned.Name = "lblReturned";
-            this.lblReturned.Size = new System.Drawing.Size(81, 20);
+            this.lblReturned.Size = new System.Drawing.Size(25, 20);
             this.lblReturned.TabIndex = 13;
-            this.lblReturned.Text = "50000000";
+            this.lblReturned.Text = "....";
             // 
             // label8
             // 
@@ -431,7 +438,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(417, 320);
+            this.label7.Location = new System.Drawing.Point(342, 321);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(108, 20);
             this.label7.TabIndex = 7;
@@ -441,11 +448,11 @@
             // 
             this.lblTotalAmount.AutoSize = true;
             this.lblTotalAmount.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalAmount.Location = new System.Drawing.Point(540, 320);
+            this.lblTotalAmount.Location = new System.Drawing.Point(472, 320);
             this.lblTotalAmount.Name = "lblTotalAmount";
-            this.lblTotalAmount.Size = new System.Drawing.Size(81, 20);
+            this.lblTotalAmount.Size = new System.Drawing.Size(25, 20);
             this.lblTotalAmount.TabIndex = 6;
-            this.lblTotalAmount.Text = "50000000";
+            this.lblTotalAmount.Text = "....";
             // 
             // label6
             // 
@@ -460,29 +467,31 @@
             // 
             this.lblTotalQuantity.AutoSize = true;
             this.lblTotalQuantity.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalQuantity.Location = new System.Drawing.Point(540, 300);
+            this.lblTotalQuantity.Location = new System.Drawing.Point(472, 300);
             this.lblTotalQuantity.Name = "lblTotalQuantity";
-            this.lblTotalQuantity.Size = new System.Drawing.Size(45, 20);
+            this.lblTotalQuantity.Size = new System.Drawing.Size(25, 20);
             this.lblTotalQuantity.TabIndex = 4;
-            this.lblTotalQuantity.Text = "5000";
+            this.lblTotalQuantity.Text = "....";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(417, 300);
+            this.label3.Location = new System.Drawing.Point(342, 301);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(111, 20);
             this.label3.TabIndex = 3;
             this.label3.Text = "Total Quantity:";
             // 
-            // lstBill
+            // lstPro
             // 
-            this.lstBill.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.lstBill.Location = new System.Drawing.Point(8, 98);
-            this.lstBill.Name = "lstBill";
-            this.lstBill.Size = new System.Drawing.Size(660, 199);
-            this.lstBill.TabIndex = 2;
+            this.lstPro.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.lstPro.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.lstPro.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.lstPro.Location = new System.Drawing.Point(8, 98);
+            this.lstPro.Name = "lstPro";
+            this.lstPro.Size = new System.Drawing.Size(660, 199);
+            this.lstPro.TabIndex = 2;
             // 
             // dateTime
             // 
@@ -501,6 +510,16 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "CMART BILL";
             // 
+            // btnPrint
+            // 
+            this.btnPrint.Location = new System.Drawing.Point(598, 382);
+            this.btnPrint.Name = "btnPrint";
+            this.btnPrint.Size = new System.Drawing.Size(75, 23);
+            this.btnPrint.TabIndex = 8;
+            this.btnPrint.Text = "Print";
+            this.btnPrint.UseVisualStyleBackColor = true;
+            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
+            // 
             // C03_Bill
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -518,10 +537,10 @@
             this.tabList.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.list)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lstBill)).EndInit();
             this.tabAdd.ResumeLayout(false);
             this.tabAdd.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.lstBill)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lstPro)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -543,8 +562,7 @@
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.TabControl tabList;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Button btnDelete;
-        private System.Windows.Forms.DataGridView list;
+        private System.Windows.Forms.DataGridView lstBill;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.TabPage tabAdd;
@@ -561,8 +579,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label lblTotalQuantity;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.DataGridView lstBill;
-        private System.Windows.Forms.DateTimePicker dateTime;
+        private System.Windows.Forms.DataGridView lstPro;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
@@ -572,5 +589,8 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtIDProduct;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnEdit;
+        private System.Windows.Forms.DateTimePicker dateTime;
+        private System.Windows.Forms.Button btnPrint;
     }
 }
